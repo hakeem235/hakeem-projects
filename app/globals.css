@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Custom easing curves (Emil Kowalski) ─────────────────────── */
+:root {
+  --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer:  cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─── Base ──────────────────────────────────────────────────────── */
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply bg-background text-text-base font-sans antialiased;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4 {
+    @apply font-bold tracking-tight text-primary;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+}
+
+/* ─── Button press feedback (scale on :active) ──────────────────── */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center font-semibold rounded-lg
+           transition-[transform,background-color,box-shadow,opacity]
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-primary {
+    @apply btn bg-accent text-white px-7 py-3;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { @apply bg-blue-500; }
+  }
+
+  .btn-outline {
+    @apply btn border border-white text-white px-7 py-3;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-outline:hover { @apply bg-white text-primary; }
+  }
+
+  .btn-white {
+    @apply btn bg-white text-accent px-7 py-3;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-white:hover { @apply bg-gray-50; }
+  }
+}
+
+/* ─── Cards ─────────────────────────────────────────────────────── */
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100 p-6;
+    transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px -6px rgba(15,23,42,0.12);
+    }
+  }
+}
+
+/* ─── Stagger: service cards, value cards, portfolio ────────────── */
+@layer utilities {
+  .stagger-item {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: staggerFadeIn 400ms var(--ease-out) forwards;
+  }
+
+  .stagger-item:nth-child(1) { animation-delay: 0ms; }
+  .stagger-item:nth-child(2) { animation-delay: 60ms; }
+  .stagger-item:nth-child(3) { animation-delay: 120ms; }
+  .stagger-item:nth-child(4) { animation-delay: 180ms; }
+  .stagger-item:nth-child(5) { animation-delay: 240ms; }
+  .stagger-item:nth-child(6) { animation-delay: 300ms; }
+
+  @keyframes staggerFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ─── Section fade-in on entry (@starting-style) ────────────────── */
+@layer utilities {
+  .section-enter {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+}
+
+/* ─── Form inputs ────────────────────────────────────────────────── */
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm
+           text-text-base placeholder-gray-400 outline-none;
+    transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+  }
+
+  .input:focus {
+    @apply border-accent;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+  }
+
+  .input-error {
+    @apply border-red-400;
+    box-shadow: 0 0 0 3px rgba(239,68,68,0.10);
+  }
+}
+
+/* ─── Nav link underline animation ─────────────────────────────── */
+@layer components {
+  .nav-link {
+    @apply relative text-sm text-gray-300 transition-colors;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 100%;
+    height: 1px;
+    background: #3B82F6;
+    transition: right 200ms var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-link:hover { @apply text-white; }
+    .nav-link:hover::after { right: 0; }
+  }
+}
+
+/* ─── prefers-reduced-motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
