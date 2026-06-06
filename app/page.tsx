@@ -178,7 +178,7 @@ export default function Home() {
         <FadeUp>
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-4">Ready to build something great?</h2>
-            <p className="text-white/80 mb-8">Let's talk about your project and how we can help.</p>
+            <p className="text-white/80 mb-8">Let&apos;s talk about your project and how we can help.</p>
             <motion.div
               className="inline-block"
               whileHover={reduced ? {} : { scale: 1.03 }}
