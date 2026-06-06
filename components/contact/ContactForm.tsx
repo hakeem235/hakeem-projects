@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -16,6 +17,7 @@ export default function ContactForm() {
   const [fields, setFields] = useState({ name: "", email: "", company: "", message: "" });
   const [errors, setErrors] = useState<Partial<typeof fields>>({});
   const [status, setStatus] = useState<FormState>("idle");
+  const reduced = useReducedMotion();
 
   const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
   const demoMode = !formspreeId || formspreeId === "your_formspree_id_here";
@@ -29,7 +31,7 @@ export default function ContactForm() {
     e.preventDefault();
     const errs = validate(fields);
     if (Object.keys(errs).length) { setErrors(errs); return; }
-    if (demoMode) { console.warn("[Contact] Demo mode — NEXT_PUBLIC_FORMSPREE_ID not set."); setStatus("success"); return; }
+    if (demoMode) { setStatus("success"); return; }
     setStatus("submitting");
     try {
       const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
@@ -41,16 +43,21 @@ export default function ContactForm() {
   }
 
   if (status === "success") return (
-    <div className="bg-green-50 border border-green-200 text-green-800 px-6 py-8 rounded-xl text-center section-enter">
-      <p className="font-semibold text-lg mb-1">Thanks! We'll be in touch.</p>
-      <p className="text-sm">We typically respond within one business day.</p>
-    </div>
+    <motion.div
+      className="bg-amber-50 border border-amber-200 text-primary px-6 py-8 rounded-2xl text-center"
+      initial={reduced ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <p className="font-semibold text-lg mb-1">Thanks! We&apos;ll be in touch.</p>
+      <p className="text-text-muted text-sm">We typically respond within one business day.</p>
+    </motion.div>
   );
 
   return (
     <>
       {demoMode && (
-        <div className="mb-6 text-sm bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
+        <div className="mb-6 text-sm bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl">
           Demo mode — set <code className="font-mono">NEXT_PUBLIC_FORMSPREE_ID</code> to enable live submission.
         </div>
       )}
@@ -62,13 +69,15 @@ export default function ContactForm() {
         ].map((f) => (
           <div key={f.name}>
             <label htmlFor={f.name} className="block text-sm font-medium text-text-base mb-1">{f.label}</label>
-            <input
+            <motion.input
               id={f.name}
               name={f.name}
               type={f.type}
               value={fields[f.name as keyof typeof fields]}
               onChange={handleChange}
-              className={`input w-full ${errors[f.name as keyof typeof errors] ? "border-red-400 focus:ring-red-300" : ""}`}
+              whileFocus={reduced ? {} : { scale: 1.01 }}
+              transition={{ duration: 0.15 }}
+              className={`input w-full ${errors[f.name as keyof typeof errors] ? "!border-red-400" : ""}`}
             />
             {errors[f.name as keyof typeof errors] && (
               <p className="text-xs text-red-500 mt-1">{errors[f.name as keyof typeof errors]}</p>
@@ -77,26 +86,30 @@ export default function ContactForm() {
         ))}
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-text-base mb-1">Message</label>
-          <textarea
+          <motion.textarea
             id="message"
             name="message"
             rows={5}
             value={fields.message}
             onChange={handleChange}
-            className={`input w-full resize-none ${errors.message ? "border-red-400 focus:ring-red-300" : ""}`}
+            whileFocus={reduced ? {} : { scale: 1.01 }}
+            transition={{ duration: 0.15 }}
+            className={`input w-full resize-none ${errors.message ? "!border-red-400" : ""}`}
           />
           {errors.message && <p className="text-xs text-red-500 mt-1">{errors.message}</p>}
         </div>
         {status === "error" && (
           <p className="text-sm text-red-500">Something went wrong. Please try again or email us directly.</p>
         )}
-        <button
+        <motion.button
           type="submit"
           disabled={status === "submitting"}
           className="btn btn-primary w-full disabled:opacity-60"
+          whileHover={reduced ? {} : { scale: 1.02 }}
+          whileTap={reduced ? {} : { scale: 0.97 }}
         >
           {status === "submitting" ? "Sending…" : "Send Message"}
-        </button>
+        </motion.button>
       </form>
     </>
   );

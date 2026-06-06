@@ -13,7 +13,7 @@ export default function PortfolioPage() {
       <section className="bg-primary text-white py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Our Work</h1>
-          <p className="text-gray-300 text-lg">A selection of projects we've built and are proud of.</p>
+          <p className="text-gray-300 text-lg">A selection of projects we&apos;ve built and are proud of.</p>
         </div>
       </section>
       <section className="py-20 px-4 bg-background">
