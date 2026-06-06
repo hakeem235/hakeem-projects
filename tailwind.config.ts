@@ -9,13 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#0F172A",
-        accent: "#3B82F6",
-        background: "#F8FAFC",
-        "text-base": "#1E293B",
+        primary: "#1C1917",
+        accent: "#F59E0B",
+        "accent-2": "#F97316",
+        background: "#FAFAF9",
+        surface: "#F5F0EB",
+        "text-base": "#292524",
+        "text-muted": "#78716C",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
       },
     },
   },
