@@ -1,78 +1,143 @@
 "use client";
+
 import { useState } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
-import { StaggerChildren, itemVariants } from "@/components/motion";
 
-type Category = "All" | "Web" | "Mobile" | "API";
+type Filter = "all" | "web" | "mobile" | "qa";
 
-const projects = [
-  { title: "E-Commerce Platform", desc: "Full-stack marketplace with real-time inventory, Stripe payments, and a merchant dashboard.", tags: ["Next.js", "PostgreSQL", "Stripe"], category: "Web" as Category, seed: 10 },
-  { title: "Fleet Management App", desc: "Mobile-first logistics dashboard with live GPS tracking and driver communication tools.", tags: ["React Native", "Node.js", "WebSockets"], category: "Mobile" as Category, seed: 20 },
-  { title: "Analytics API", desc: "High-throughput data pipeline processing 10M events/day with sub-100ms query response.", tags: ["Python", "Kafka", "ClickHouse"], category: "API" as Category, seed: 30 },
-  { title: "SaaS Booking Platform", desc: "Multi-tenant appointment scheduling system with calendar sync and automated reminders.", tags: ["Next.js", "Prisma", "Twilio"], category: "Web" as Category, seed: 40 },
-  { title: "Fitness Tracking App", desc: "Cross-platform mobile app with workout logging, progress charts, and Apple Health integration.", tags: ["React Native", "Expo", "Firebase"], category: "Mobile" as Category, seed: 50 },
-  { title: "Payment Gateway Integration", desc: "Unified payments API abstracting Stripe, Adyen, and PayPal with webhook normalisation.", tags: ["Node.js", "TypeScript", "Redis"], category: "API" as Category, seed: 60 },
+const filters: { key: Filter; label: string }[] = [
+  { key: "all", label: "all" },
+  { key: "web", label: "web" },
+  { key: "mobile", label: "mobile" },
+  { key: "qa", label: "qa" },
 ];
 
-const categories: Category[] = ["All", "Web", "Mobile", "API"];
+type Project = {
+  cats: Filter[];
+  tags: string[];
+  year: string;
+  title: string;
+  desc: string;
+  metrics: { b: string; span: string }[];
+  seed: number;
+};
+
+const projects: Project[] = [
+  {
+    cats: ["web", "qa"],
+    tags: ["Web app", "QA"],
+    year: "2025",
+    title: "Northwind — B2B logistics dashboard",
+    desc: "A real-time freight dashboard rebuilt from the ground up. New design system, Next.js front end, and a Playwright suite covering 180+ flows.",
+    metrics: [
+      { b: "2.4s→0.9s", span: "load time" },
+      { b: "184", span: "e2e tests" },
+      { b: "0", span: "launch regressions" },
+    ],
+    seed: 21,
+  },
+  {
+    cats: ["mobile"],
+    tags: ["Mobile app", "Design"],
+    year: "2025",
+    title: "Tempo — habit & wellness app",
+    desc: "End-to-end React Native app: brand, UX, build and store launch. Offline-first with a tested sync engine and buttery 60fps interactions.",
+    metrics: [
+      { b: "4.8★", span: "app store" },
+      { b: "iOS+Android", span: "one codebase" },
+      { b: "12 wks", span: "to launch" },
+    ],
+    seed: 22,
+  },
+  {
+    cats: ["qa"],
+    tags: ["QA consult", "Automation"],
+    year: "2024",
+    title: "Ledgerly — fintech QA overhaul",
+    desc: "Embedded with their team to build a test strategy from scratch: CI gates, automated regression and a release process they now run themselves.",
+    metrics: [
+      { b: "71%→96%", span: "coverage" },
+      { b: "-83%", span: "escaped bugs" },
+      { b: "3×", span: "release speed" },
+    ],
+    seed: 23,
+  },
+  {
+    cats: ["web"],
+    tags: ["Marketing site", "Web"],
+    year: "2024",
+    title: "Atlas Studio — agency rebrand & site",
+    desc: "A high-craft marketing site with a headless CMS. Perfect Lighthouse scores, fully accessible, and easy for their team to update.",
+    metrics: [
+      { b: "100", span: "lighthouse" },
+      { b: "WCAG AA", span: "accessible" },
+      { b: "+38%", span: "lead conversion" },
+    ],
+    seed: 24,
+  },
+];
 
 export default function PortfolioGrid() {
-  const [active, setActive] = useState<Category>("All");
-  const reduced = useReducedMotion();
-  const filtered = active === "All" ? projects : projects.filter((p) => p.category === active);
+  const [active, setActive] = useState<Filter>("all");
 
   return (
     <>
-      <div className="flex flex-wrap gap-2 justify-center mb-12">
-        {categories.map((cat) => (
-          <motion.button
-            key={cat}
-            onClick={() => setActive(cat)}
-            whileTap={reduced ? {} : { scale: 0.95 }}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors duration-150 ${
-              active === cat
-                ? "bg-accent text-primary font-semibold"
-                : "bg-white text-text-muted border border-stone-200 hover:border-accent hover:text-accent"
-            }`}
+      <div className="filters">
+        {filters.map((f) => (
+          <span
+            key={f.key}
+            className={active === f.key ? "chip on" : "chip"}
+            role="button"
+            tabIndex={0}
+            onClick={() => setActive(f.key)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setActive(f.key);
+            }}
           >
-            {cat}
-          </motion.button>
+            {f.label}
+          </span>
         ))}
       </div>
-      <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((p) => (
-          <motion.div
-            key={p.title}
-            variants={itemVariants}
-            className="bg-surface rounded-2xl border border-stone-200/60 overflow-hidden flex flex-col"
-          >
-            <div className="relative aspect-[16/9] overflow-hidden">
-              <motion.div
-                className="w-full h-full"
-                whileHover={reduced ? {} : { scale: 1.05 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-              >
+
+      <div className="work-grid">
+        {projects
+          .filter((p) => active === "all" || p.cats.includes(active))
+          .map((p) => (
+            <article className="proj reveal" key={p.title}>
+              <div className="shot">
                 <Image
-                  src={`https://picsum.photos/seed/${p.seed}/800/450`}
+                  src={`https://picsum.photos/seed/work${p.seed}/800/600`}
                   alt={p.title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 820px) 100vw, 50vw"
                 />
-              </motion.div>
-            </div>
-            <div className="p-6 flex flex-col flex-1">
-              <span className="text-xs font-semibold text-accent bg-amber-50 px-2 py-0.5 rounded-full self-start mb-3">{p.category}</span>
-              <h3 className="font-bold text-primary text-lg mb-2">{p.title}</h3>
-              <p className="text-text-muted text-sm mb-4 flex-1">{p.desc}</p>
-              <div className="flex flex-wrap gap-2">
-                {p.tags.map((t) => <span key={t} className="text-xs bg-white text-text-muted px-2 py-0.5 rounded-full border border-stone-200">{t}</span>)}
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </StaggerChildren>
+              <div className="pbody">
+                <div className="ptop">
+                  <div className="tags">
+                    {p.tags.map((t) => (
+                      <span className="ptag" key={t}>
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="year">{p.year}</span>
+                </div>
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+                <div className="metrics">
+                  {p.metrics.map((m) => (
+                    <div className="m" key={m.span}>
+                      <b>{m.b}</b>
+                      <span>{m.span}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </article>
+          ))}
+      </div>
     </>
   );
 }

@@ -9,16 +9,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#1C1917",
-        accent: "#F59E0B",
-        "accent-2": "#F97316",
-        background: "#FAFAF9",
-        surface: "#F5F0EB",
-        "text-base": "#292524",
-        "text-muted": "#78716C",
+        /* Terminal — dark / developer palette */
+        bg: "#070B14",
+        "bg-2": "#0A1020",
+        panel: "#0C1526",
+        "panel-2": "#0E1A30",
+        line: "#18243F",
+        "line-2": "#213253",
+        text: "#D8E3F4",
+        dim: "#94A6C4",
+        faint: "#5E7194",
+        blue: "#5EA0FF",
+        "blue-deep": "#2F6BFF",
+        green: "#2EE6A6",
+        "green-dim": "#1E9E76",
+        amber: "#FFB547",
+        red: "#FF6B6B",
       },
       fontFamily: {
-        sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
+        sans: ["var(--font-space)", "Space Grotesk", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "JetBrains Mono", "ui-monospace", "monospace"],
+      },
+      maxWidth: {
+        wrap: "1200px",
       },
     },
   },
