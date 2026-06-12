@@ -1,83 +1,208 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
-import { FadeUp } from "@/components/motion";
 
 export const metadata: Metadata = {
-  title: "Our Services",
-  description: "Web development, mobile apps, APIs, DevOps, and technical consulting — end-to-end software delivery.",
-  openGraph: { title: "Our Services", description: "Web development, mobile apps, APIs, DevOps, and technical consulting — end-to-end software delivery." },
+  title: "Services",
+  description:
+    "Design, web & mobile development, QA consultation and ongoing support — the full product lifecycle from one studio.",
+  openGraph: {
+    title: "Services — Hakeem's Projects",
+    description:
+      "Design, web & mobile development, QA consultation and ongoing support — the full product lifecycle from one studio.",
+  },
 };
 
 const services = [
-  { title: "Web Development", desc: "We build fast, scalable web applications tailored to your business needs — from landing pages to full-stack SaaS products.", points: ["Next.js, React, TypeScript", "REST & GraphQL APIs", "Database design and optimisation", "Authentication and authorisation", "Performance and Core Web Vitals"], seed: 71 },
-  { title: "Mobile App Development", desc: "Cross-platform mobile apps that feel native, built efficiently with shared codebases and deployed to both iOS and Android.", points: ["React Native", "Expo managed and bare workflow", "Push notifications and offline support", "App Store and Google Play deployment", "Integration with device APIs"], seed: 72 },
-  { title: "API & Backend Engineering", desc: "Robust, well-documented APIs and backend systems that scale with your growth and integrate cleanly with everything around them.", points: ["Node.js, Python, Go", "Microservices and event-driven architecture", "Third-party API integrations", "Webhooks and real-time systems", "Caching, queuing, and job scheduling"], seed: 73 },
-  { title: "Technical Consulting", desc: "Strategic technical guidance to help your team make better decisions, move faster, and avoid costly mistakes.", points: ["Architecture reviews", "Tech stack evaluation and selection", "Code audits and quality assessments", "Hiring and team structure guidance", "Roadmap planning and prioritisation"], seed: 74 },
-  { title: "UI/UX Design", desc: "Clean, modern interfaces designed for clarity and conversion — always with the end user in mind.", points: ["Wireframing and prototyping", "Design systems and component libraries", "Figma-to-code handoff", "Accessibility (WCAG AA)", "Responsive and mobile-first design"], seed: 75 },
-  { title: "DevOps & Infrastructure", desc: "Reliable, automated infrastructure that keeps your product running, deployments fast, and your team unblocked.", points: ["CI/CD pipeline setup (GitHub Actions, Vercel)", "Cloud infrastructure (AWS, GCP)", "Containerisation with Docker and Kubernetes", "Monitoring, alerting, and logging", "Security hardening and secret management"], seed: 76 },
+  {
+    num: "01",
+    icon: "◑",
+    title: "UI/UX & product design",
+    body: "We turn fuzzy ideas into clear, usable products. Through research, rapid prototyping and tight visual craft, we design interfaces people understand on first contact — and hand off a design system your team can keep building on.",
+    chips: ["User research", "Information architecture", "Wireframes & flows", "Hi-fi UI", "Prototyping", "Design systems"],
+  },
+  {
+    num: "02",
+    icon: "</>",
+    title: "Web development",
+    body: "Production-grade web apps and marketing sites built on a modern, typed stack. Fast, accessible and maintainable — with a backend that won't buckle when you grow. Every build ships with tests wired into CI.",
+    chips: ["React / Next.js", "TypeScript", "Node & Go APIs", "Postgres", "Headless CMS", "Core Web Vitals"],
+  },
+  {
+    num: "03",
+    icon: "▣",
+    title: "Mobile design & development",
+    body: "Native-grade iOS and Android apps from a single React Native codebase. We design for the platform, build for real-device performance, and test across screens, gestures and offline states.",
+    chips: ["React Native", "iOS & Android", "Native modules", "Offline-first", "Push & deep links", "App store launch"],
+  },
+  {
+    num: "04",
+    icon: "✓",
+    title: "QA consultation & automation",
+    id: "qa",
+    iconAccent: true,
+    body: "Our specialty. Whether you need us to own quality on a build or level up your own team's testing, we design the strategy, write the automation, and set up the gates that stop bugs reaching production.",
+    chips: ["Test strategy", "Playwright / Cypress E2E", "Unit & integration", "CI quality gates", "Accessibility audits", "Load & security testing"],
+    chipsOn: true,
+  },
+  {
+    num: "05",
+    icon: "⟳",
+    title: "Maintenance & support",
+    body: 'Software is never "done." We keep your product healthy with monitoring, dependency upkeep, performance tuning and a clear SLA — so small issues never become big ones.',
+    chips: ["Monitoring & alerts", "Dependency updates", "Performance tuning", "Bug triage", "Feature iterations", "SLA support"],
+  },
+];
+
+const stack = [
+  { cat: "Frontend", items: ["React / Next.js", "React Native", "TypeScript", "Tailwind"] },
+  { cat: "Backend", items: ["Node.js", "Go", "PostgreSQL", "Redis"] },
+  { cat: "Quality", items: ["Playwright", "Cypress", "Vitest / Jest", "axe / Lighthouse"] },
+  { cat: "Ops", items: ["GitHub Actions", "Docker", "Vercel / AWS", "Sentry"] },
 ];
 
 export default function ServicesPage() {
   return (
     <>
-      {/* Image hero */}
-      <section className="relative py-28 px-4 overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
-          alt="Technology and software development"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1C1917]/85 to-[#1C1917]/50" />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">Our Services</h1>
-          <p className="text-white/75 text-lg">End-to-end software delivery — from idea to production and beyond.</p>
+      <section className="phead gridbg">
+        <div className="wrap">
+          <p className="crumb">
+            ~/ <b>services</b>
+          </p>
+          <p className="kicker">
+            <i />what we do
+          </p>
+          <h1 className="h-xl">Everything your product needs — design, build, test, repeat.</h1>
+          <p className="lead">
+            Pick a single discipline or hand us the whole thing. However we engage, quality assurance runs through
+            all of it.
+          </p>
         </div>
       </section>
 
-      {/* Alternating service sections */}
-      <section className="py-20 px-4 bg-background">
-        <div className="max-w-5xl mx-auto space-y-24">
-          {services.map((s, i) => (
-            <FadeUp key={s.title} delay={0.05}>
-              <div className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${i % 2 === 1 ? "md:flex-row-reverse" : ""}`}
-                style={{ direction: i % 2 === 1 ? "rtl" : "ltr" }}>
-                <div style={{ direction: "ltr" }}>
-                  <h2 className="text-2xl font-bold text-primary mb-3">{s.title}</h2>
-                  <p className="text-text-muted mb-5">{s.desc}</p>
-                  <ul className="space-y-2">
-                    {s.points.map((p) => (
-                      <li key={p} className="flex items-start gap-2 text-sm text-text-base">
-                        <span className="text-accent mt-0.5 font-bold">✓</span>{p}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg" style={{ direction: "ltr" }}>
-                  <Image
-                    src={`https://picsum.photos/seed/${s.seed}/800/600`}
-                    alt={s.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
+      <section className="section tight">
+        <div className="wrap">
+          {services.map((s) => (
+            <article className="svc reveal" id={s.id} key={s.num}>
+              <div className="lhs">
+                <div className="snum">{s.num}</div>
+                <div
+                  className="sic"
+                  style={
+                    s.iconAccent
+                      ? { background: "rgba(46,230,166,.1)", borderColor: "rgba(46,230,166,.34)", color: "var(--green)" }
+                      : undefined
+                  }
+                >
+                  {s.icon}
                 </div>
               </div>
-            </FadeUp>
+              <div className="sbody">
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+                <div className="deli">
+                  {s.chips.map((c) => (
+                    <span className={s.chipsOn ? "chip on" : "chip"} key={c}>
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 px-4 bg-gradient-to-br from-amber-500 to-orange-500 text-white text-center">
-        <FadeUp>
-          <h2 className="text-2xl font-bold mb-4">Have a project in mind?</h2>
-          <p className="text-white/80 mb-6">Let&apos;s figure out what you need and how we can help.</p>
-          <Link href="/contact" className="btn btn-white">Get In Touch</Link>
-        </FadeUp>
+      {/* TECH STACK */}
+      <section className="section tight gridbg">
+        <div className="wrap">
+          <p className="kicker reveal">
+            <i />our toolkit
+          </p>
+          <h2 className="h-lg reveal">Battle-tested tech, chosen for your project — not our habits.</h2>
+          <div className="stack">
+            {stack.map((g) => (
+              <div className="tcat reveal" key={g.cat}>
+                <h5>{g.cat}</h5>
+                {g.items.map((it) => (
+                  <div key={it}>{it}</div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ENGAGEMENT */}
+      <section className="section tight">
+        <div className="wrap">
+          <p className="kicker reveal">
+            <i />how to work with us
+          </p>
+          <h2 className="h-lg reveal">Engagement models that fit the work.</h2>
+          <div className="eng">
+            <article className="card reveal">
+              <div className="cnum">{"// fixed scope"}</div>
+              <h3>Project</h3>
+              <p className="price">best for a defined build</p>
+              <ul>
+                <li>Clear scope &amp; fixed price</li>
+                <li>Design → build → QA → launch</li>
+                <li>Milestone-based delivery</li>
+                <li>30 days post-launch support</li>
+              </ul>
+            </article>
+            <article className="card reveal" style={{ borderColor: "rgba(46,230,166,.3)" }}>
+              <div className="cnum" style={{ color: "var(--green)" }}>
+                {"// most popular"}
+              </div>
+              <h3>Embedded team</h3>
+              <p className="price">best for ongoing product work</p>
+              <ul>
+                <li>Dedicated designers &amp; engineers</li>
+                <li>Works inside your sprints</li>
+                <li>QA built into every release</li>
+                <li>Monthly rolling engagement</li>
+              </ul>
+              <Link
+                className="btn btn-primary"
+                style={{ marginTop: "20px", width: "100%", justifyContent: "center" }}
+                href="/contact"
+              >
+                Talk to us →
+              </Link>
+            </article>
+            <article className="card reveal">
+              <div className="cnum">{"// advisory"}</div>
+              <h3>QA consult</h3>
+              <p className="price">best for in-house teams</p>
+              <ul>
+                <li>Audit your current testing</li>
+                <li>Test strategy &amp; tooling setup</li>
+                <li>Automation pipeline build-out</li>
+                <li>Team training &amp; handover</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section tight">
+        <div className="wrap">
+          <div className="cta-band center reveal">
+            <h2 className="h-lg">Not sure which you need?</h2>
+            <p className="lead" style={{ margin: "14px auto 0" }}>
+              Send over what you&apos;re building. We&apos;ll tell you the honest version of what it takes.
+            </p>
+            <div className="hero-row">
+              <Link className="btn btn-primary lg" href="/contact">
+                $ start_project →
+              </Link>
+              <Link className="btn btn-ghost lg" href="/portfolio">
+                See the work
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </>
   );

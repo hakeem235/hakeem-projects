@@ -1,6 +1,6 @@
-# Hakeem Projects — Company Website
+# Hakeem's Projects — Studio Website
 
-Company website for Hakeem Projects, built with Next.js 14, TypeScript, and Tailwind CSS.
+Website for Hakeem's Projects — a boutique studio for web & mobile design, development and QA. Built with Next.js 14, TypeScript, and Tailwind CSS. Visual direction: **"Terminal"**, a dark developer aesthetic.
 
 ## Stack
 
@@ -8,9 +8,9 @@ Company website for Hakeem Projects, built with Next.js 14, TypeScript, and Tail
 |-------|-----------|
 | Framework | Next.js 14 (App Router) |
 | Language | TypeScript |
-| Styling | Tailwind CSS |
-| Font | Inter (Google Fonts via next/font) |
-| Forms | Formspree |
+| Styling | Tailwind CSS + design-system CSS in `app/globals.css` |
+| Fonts | Space Grotesk (sans) + JetBrains Mono (mono), via next/font |
+| Forms | Formspree (demo mode when unset) |
 | Deployment | Vercel |
 
 ## Local Setup
@@ -38,9 +38,7 @@ If `NEXT_PUBLIC_FORMSPREE_ID` is not set or is the placeholder value, the contac
 | `/` | Home |
 | `/services` | Services |
 | `/about` | About |
-| `/portfolio` | Portfolio |
-| `/blog` | Blog index |
-| `/blog/[slug]` | Blog post |
+| `/portfolio` | Work |
 | `/contact` | Contact |
 
 ## Deployment

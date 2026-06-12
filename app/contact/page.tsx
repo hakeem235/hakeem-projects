@@ -1,65 +1,103 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import ContactForm from "@/components/contact/ContactForm";
-import { FadeUp } from "@/components/motion";
 
 export const metadata: Metadata = {
-  title: "Get In Touch",
-  description: "Start a conversation about your project. We respond within one business day.",
-  openGraph: { title: "Get In Touch", description: "Start a conversation about your project. We respond within one business day." },
+  title: "Contact",
+  description: "Start a project with Hakeem's Projects — web & mobile design, development and QA consultation.",
+  openGraph: {
+    title: "Contact — Hakeem's Projects",
+    description: "Start a project with Hakeem's Projects — web & mobile design, development and QA consultation.",
+  },
 };
+
+const faqs = [
+  {
+    q: "How soon can you start?",
+    a: "Usually within 2–3 weeks. Urgent QA or audit work we can often slot in sooner.",
+    open: true,
+  },
+  {
+    q: "Do you work with early-stage startups?",
+    a: "Yes — a lot of our clients are founders. We scope to your stage and budget.",
+  },
+  {
+    q: "Can you just handle QA on our existing app?",
+    a: "Absolutely. QA consultation and automation is a standalone service — we'll plug into your team.",
+  },
+  {
+    q: "Where are you based?",
+    a: "We work remotely with clients across time zones, with overlapping hours guaranteed.",
+  },
+];
 
 export default function ContactPage() {
   return (
     <>
-      {/* Image hero */}
-      <section className="relative py-24 px-4 overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80"
-          alt="Person at a desk with warm lighting"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1C1917]/85 to-[#1C1917]/50" />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">Get In Touch</h1>
-          <p className="text-white/75 text-lg">Tell us about your project. We&apos;ll get back to you within one business day.</p>
+      <section className="phead pb-xs gridbg">
+        <div className="wrap">
+          <p className="crumb">
+            ~/ <b>contact</b>
+          </p>
+          <p className="kicker">
+            <i />let&apos;s talk
+          </p>
+          <h1 className="h-xl">Tell us what you&apos;re building.</h1>
+          <p className="lead">
+            Fill in the form and we&apos;ll reply within one business day with next steps — usually a short call to
+            scope things out. No pressure, no spam.
+          </p>
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-background">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Contact info */}
-          <FadeUp>
-            <h2 className="text-xl font-bold text-primary mb-6">Contact Information</h2>
-            <div className="space-y-5">
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                  <span className="text-accent text-sm">✉</span>
-                </div>
-                <div>
-                  <span className="font-medium text-text-base block mb-0.5 text-sm">Email</span>
-                  <a href="mailto:hello@hakeemprojects.com" className="text-accent-2 hover:underline text-sm">hello@hakeemprojects.com</a>
+      <section className="section tight">
+        <div className="wrap">
+          <div className="contact">
+            <ContactForm />
+
+            <div className="side">
+              <div className="panel reveal">
+                <h4>Reach us directly</h4>
+                <a className="crow" href="mailto:ahmed.ai.advisor@gmail.com">
+                  <span className="ci">@</span>
+                  <span>
+                    <b>ahmed.ai.advisor@gmail.com</b>
+                    <span>email · fastest way</span>
+                  </span>
+                </a>
+                <a className="crow" href="#">
+                  <span className="ci">in</span>
+                  <span>
+                    <b>LinkedIn</b>
+                    <span>/company/hakeems-projects</span>
+                  </span>
+                </a>
+                <a className="crow" href="#">
+                  <span className="ci">⌥</span>
+                  <span>
+                    <b>GitHub</b>
+                    <span>@hakeem-projects</span>
+                  </span>
+                </a>
+                <div className="crow">
+                  <span className="ci">◷</span>
+                  <span>
+                    <b>Mon–Fri, 9–6</b>
+                    <span>replies within 1 business day</span>
+                  </span>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                  <span className="text-accent text-sm">⌖</span>
-                </div>
-                <div>
-                  <span className="font-medium text-text-base block mb-0.5 text-sm">Location</span>
-                  <span className="text-text-muted text-sm">Remote / Global</span>
-                </div>
+
+              <div className="panel faq reveal">
+                <h4>Quick answers</h4>
+                {faqs.map((f) => (
+                  <details key={f.q} open={f.open}>
+                    <summary>{f.q}</summary>
+                    <p>{f.a}</p>
+                  </details>
+                ))}
               </div>
             </div>
-          </FadeUp>
-
-          {/* Form */}
-          <FadeUp delay={0.1}>
-            <ContactForm />
-          </FadeUp>
+          </div>
         </div>
       </section>
     </>
