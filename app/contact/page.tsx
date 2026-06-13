@@ -81,7 +81,7 @@ export default function ContactPage() {
                 <div className="crow">
                   <span className="ci">◷</span>
                   <span>
-                    <b>Mon–Fri, 9–6</b>
+                    <b>Sun–Thu, 8–16</b>
                     <span>replies within 1 business day</span>
                   </span>
                 </div>

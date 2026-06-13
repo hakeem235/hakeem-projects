@@ -12,8 +12,10 @@ import { usePathname } from "next/navigation";
  *  - elements already in view are revealed synchronously (no waiting on the
  *    async IntersectionObserver callback, which can lose a race on a cold load);
  *  - genuinely below-the-fold elements use the observer for the scroll effect;
- *  - if IntersectionObserver is unavailable, everything is revealed at once;
- *  - we re-bind on `load` (fonts/images settle) and keep a safety-net timeout.
+ *  - a MutationObserver re-processes any `.reveal` added later (e.g. portfolio
+ *    filter re-renders, or pages mounted after a route transition);
+ *  - we re-bind on `load` (fonts/images settle) and keep a safety-net timeout;
+ *  - if IntersectionObserver is unavailable, everything is revealed at once.
  */
 export default function RevealInit() {
   const pathname = usePathname();
@@ -21,15 +23,16 @@ export default function RevealInit() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const revealAll = () =>
-      document
-        .querySelectorAll<HTMLElement>(".reveal:not(.in)")
-        .forEach((el) => el.classList.add("in"));
-
-    // No IntersectionObserver support → just show everything.
+    // No IntersectionObserver support → reveal everything, now and as it mounts.
     if (!("IntersectionObserver" in window)) {
+      const revealAll = () =>
+        document
+          .querySelectorAll<HTMLElement>(".reveal:not(.in)")
+          .forEach((el) => el.classList.add("in"));
       revealAll();
-      return;
+      const mo = new MutationObserver(revealAll);
+      mo.observe(document.body, { childList: true, subtree: true });
+      return () => mo.disconnect();
     }
 
     const io = new IntersectionObserver(
@@ -44,51 +47,60 @@ export default function RevealInit() {
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
     );
 
-    const bind = () => {
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      const els = Array.from(
-        document.querySelectorAll<HTMLElement>(".reveal:not(.in)")
-      );
-      els.forEach((el, i) => {
-        el.style.transitionDelay = Math.min(i % 6, 5) * 60 + "ms";
-        const rect = el.getBoundingClientRect();
-        // Already in (or just below) view: reveal now instead of trusting the
-        // observer's first async callback, which can misfire before layout
-        // settles on a cold load. Otherwise hand it to the observer for scroll.
-        if (rect.top < vh * 0.95 && rect.bottom > 0) {
-          el.classList.add("in");
-        } else {
-          io.observe(el);
-        }
-      });
-    };
-
-    // Defer two frames so the route's DOM is mounted and layout has settled.
-    let raf2 = 0;
-    const raf1 = window.requestAnimationFrame(() => {
-      raf2 = window.requestAnimationFrame(bind);
-    });
-
-    // Re-run once fonts/images finish loading and shift the layout.
-    const onLoad = () => bind();
-    window.addEventListener("load", onLoad);
-
-    // Safety net: never leave in-view content hidden if everything else missed.
-    const safety = window.setTimeout(() => {
+    let stagger = 0;
+    const process = () => {
       const vh = window.innerHeight || document.documentElement.clientHeight;
       document
         .querySelectorAll<HTMLElement>(".reveal:not(.in)")
         .forEach((el) => {
+          if (!el.style.transitionDelay) {
+            el.style.transitionDelay = Math.min(stagger++ % 6, 5) * 60 + "ms";
+          }
           const rect = el.getBoundingClientRect();
-          if (rect.top < vh && rect.bottom > 0) el.classList.add("in");
+          // Already in (or just below) view: reveal now instead of trusting the
+          // observer's first async callback, which can misfire before layout
+          // settles on a cold load. Otherwise hand it to the observer.
+          if (rect.top < vh * 0.95 && rect.bottom > 0) {
+            el.classList.add("in");
+          } else {
+            io.observe(el);
+          }
         });
-    }, 1200);
+    };
+
+    // Initial pass, deferred two frames so the DOM is mounted and laid out.
+    let raf2 = 0;
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(process);
+    });
+
+    // Re-run once fonts/images finish loading and shift the layout.
+    const onLoad = () => process();
+    window.addEventListener("load", onLoad);
+
+    // Re-run whenever new nodes mount (filter re-renders, route transitions,
+    // late hydration). Debounced to one pass per frame. Watches childList only,
+    // so the `.in`/style changes we make here never re-trigger it.
+    let moScheduled = 0;
+    const mo = new MutationObserver(() => {
+      if (moScheduled) return;
+      moScheduled = window.requestAnimationFrame(() => {
+        moScheduled = 0;
+        process();
+      });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    // Safety net: never leave content stuck hidden if everything else missed.
+    const safety = window.setTimeout(process, 1200);
 
     return () => {
       window.cancelAnimationFrame(raf1);
       window.cancelAnimationFrame(raf2);
+      if (moScheduled) window.cancelAnimationFrame(moScheduled);
       window.clearTimeout(safety);
       window.removeEventListener("load", onLoad);
+      mo.disconnect();
       io.disconnect();
     };
   }, [pathname]);
