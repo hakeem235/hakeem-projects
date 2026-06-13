@@ -21,9 +21,7 @@ export default function ContactForm() {
   const [pillError, setPillError] = useState(false);
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
-  const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
-  const demoMode = !formspreeId || formspreeId === "your_formspree_id_here";
+  const [submitError, setSubmitError] = useState(false);
 
   function update(name: keyof typeof fields, value: string) {
     setFields((f) => ({ ...f, [name]: value }));
@@ -49,23 +47,21 @@ export default function ContactForm() {
 
     const payload = { ...fields, services: picked.join(", ") };
 
-    if (demoMode) {
-      // eslint-disable-next-line no-console
-      console.log("[demo mode] contact submission", payload);
-      setSent(true);
-      return;
-    }
-
+    setSubmitError(false);
     setSubmitting(true);
     try {
-      const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (res.ok) setSent(true);
+      if (res.ok) {
+        setSent(true);
+      } else {
+        setSubmitError(true);
+      }
     } catch {
-      /* swallow — demo / offline */
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
     }
@@ -188,6 +184,11 @@ export default function ContactForm() {
           <button type="submit" className="btn btn-primary lg submit" disabled={submitting}>
             {submitting ? "sending…" : "$ send_message →"}
           </button>
+          {submitError && (
+            <p className="formnote" style={{ color: "var(--red)" }} role="alert">
+              {"// couldn't send — please try again or email ahmed.ai.advisor@gmail.com"}
+            </p>
+          )}
           <p className="formnote">{"// we reply within 1 business day · ahmed.ai.advisor@gmail.com"}</p>
         </form>
       )}
