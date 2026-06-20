@@ -20,60 +20,25 @@ type Project = {
   desc: string;
   metrics: { b: string; span: string }[];
   seed: number;
+  url?: string;
+  img?: string;
 };
 
 const projects: Project[] = [
   {
-    cats: ["web", "qa"],
-    tags: ["Web app", "QA"],
-    year: "2025",
-    title: "Northwind — B2B logistics dashboard",
-    desc: "A real-time freight dashboard rebuilt from the ground up. New design system, Next.js front end, and a Playwright suite covering 180+ flows.",
-    metrics: [
-      { b: "2.4s→0.9s", span: "load time" },
-      { b: "184", span: "e2e tests" },
-      { b: "0", span: "launch regressions" },
-    ],
-    seed: 21,
-  },
-  {
-    cats: ["mobile"],
-    tags: ["Mobile app", "Design"],
-    year: "2025",
-    title: "Tempo — habit & wellness app",
-    desc: "End-to-end React Native app: brand, UX, build and store launch. Offline-first with a tested sync engine and buttery 60fps interactions.",
-    metrics: [
-      { b: "4.8★", span: "app store" },
-      { b: "iOS+Android", span: "one codebase" },
-      { b: "12 wks", span: "to launch" },
-    ],
-    seed: 22,
-  },
-  {
-    cats: ["qa"],
-    tags: ["QA consult", "Automation"],
-    year: "2024",
-    title: "Ledgerly — fintech QA overhaul",
-    desc: "Embedded with their team to build a test strategy from scratch: CI gates, automated regression and a release process they now run themselves.",
-    metrics: [
-      { b: "71%→96%", span: "coverage" },
-      { b: "-83%", span: "escaped bugs" },
-      { b: "3×", span: "release speed" },
-    ],
-    seed: 23,
-  },
-  {
     cats: ["web"],
-    tags: ["Marketing site", "Web"],
-    year: "2024",
-    title: "Atlas Studio — agency rebrand & site",
-    desc: "A high-craft marketing site with a headless CMS. Perfect Lighthouse scores, fully accessible, and easy for their team to update.",
+    tags: ["Web app", "SaaS"],
+    year: "2026",
+    title: "FlowPilot — cash-flow forecasting for small business",
+    desc: "A daily cash forecast that tells owners what they can safely spend. Consolidates invoices, expenses and tax reserves into a 30/60/90-day horizon with scenario modeling and bank import.",
     metrics: [
-      { b: "100", span: "lighthouse" },
-      { b: "WCAG AA", span: "accessible" },
-      { b: "+38%", span: "lead conversion" },
+      { b: "30/60/90", span: "day horizon" },
+      { b: "<10 min", span: "to set up" },
+      { b: "Live", span: "on Vercel" },
     ],
-    seed: 24,
+    seed: 25,
+    url: "https://flow-pilot-eosin.vercel.app/",
+    img: "/work/flowpilot.png",
   },
 ];
 
@@ -106,7 +71,7 @@ export default function PortfolioGrid() {
             <article className="proj reveal" key={p.title}>
               <div className="shot">
                 <Image
-                  src={`https://picsum.photos/seed/work${p.seed}/800/600`}
+                  src={p.img ?? `https://picsum.photos/seed/work${p.seed}/800/600`}
                   alt={p.title}
                   fill
                   className="object-cover"
@@ -124,7 +89,15 @@ export default function PortfolioGrid() {
                   </div>
                   <span className="year">{p.year}</span>
                 </div>
-                <h3>{p.title}</h3>
+                <h3>
+                  {p.url ? (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer">
+                      {p.title}
+                    </a>
+                  ) : (
+                    p.title
+                  )}
+                </h3>
                 <p>{p.desc}</p>
                 <div className="metrics">
                   {p.metrics.map((m) => (
