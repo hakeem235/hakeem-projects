@@ -27,6 +27,21 @@ type Project = {
 const projects: Project[] = [
   {
     cats: ["web"],
+    tags: ["Web app", "SaaS", "AI"],
+    year: "2026",
+    title: "ComplianceAI — legal & compliance platform for Saudi Arabia",
+    desc: "AI-powered contract review, compliance tracking and document generation grounded in Saudi regulation. Flags clause risks with citations, tracks ZATCA/CMA deadlines, and answers legal questions — fully bilingual (EN/AR) with RTL support.",
+    metrics: [
+      { b: "EN / AR", span: "bilingual + RTL" },
+      { b: "PDPL", span: "ready" },
+      { b: "Live", span: "on Vercel" },
+    ],
+    seed: 26,
+    url: "https://compliance-ai-olive.vercel.app/",
+    img: "/work/complianceai.png",
+  },
+  {
+    cats: ["web"],
     tags: ["Web app", "SaaS"],
     year: "2026",
     title: "FlowPilot — cash-flow forecasting for small business",
