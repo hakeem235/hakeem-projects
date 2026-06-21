@@ -28,6 +28,34 @@ const how = [
   { n: "06", title: "Support & iterate", desc: "We stick around to keep it healthy and help it grow." },
 ];
 
+const engagements = [
+  {
+    client: "STC",
+    role: "Test Automation",
+    desc: "Configured Tosca servers and designed automated test scripts for 300+ test cases across multiple applications, increasing testing efficiency.",
+  },
+  {
+    client: "ANB — Arab National Bank",
+    role: "Loan Origination System",
+    desc: "Designed and executed test cases for the Loan Origination System (LOS); reported and tracked defects through Jira.",
+  },
+  {
+    client: "BOG — Board of Grievances",
+    role: "Web Application QA",
+    desc: "Created and executed web application test scenarios, ensuring compliance with business requirements and efficient defect management.",
+  },
+  {
+    client: "SIO — Saudi Irrigation Organization",
+    role: "QA Documentation",
+    desc: "Developed and maintained structured QA documentation aligned with TMMi certification objectives.",
+  },
+  {
+    client: "DAMAC Properties",
+    role: "Functional & Regression",
+    desc: "Designed and executed functional and regression test cases for the DAMAC web application, managing defects through Azure DevOps.",
+  },
+];
+
 const bigstats = [
   { value: "40+", label: "products shipped" },
   { value: "9 yrs", label: "in the craft" },
@@ -132,6 +160,25 @@ export default function AboutPage() {
                   <p>{h.desc}</p>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* QA TRACK RECORD */}
+      <section className="section tight gridbg">
+        <div className="wrap">
+          <p className="kicker reveal">
+            <i />selected QA engagements
+          </p>
+          <h2 className="h-lg reveal">Quality work we&apos;ve led in the field.</h2>
+          <div className="values">
+            {engagements.map((e) => (
+              <article className="card reveal" key={e.client}>
+                <div className="cnum">{e.role}</div>
+                <h3>{e.client}</h3>
+                <p>{e.desc}</p>
+              </article>
             ))}
           </div>
         </div>
